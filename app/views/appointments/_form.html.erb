@@ -1,0 +1,105 @@
+<%= form_with(model: appointment, local: true) do |form| %>
+  <% if appointment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>
+
+      <ul>
+      <% appointment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="appointment_form">
+  <div class="field">
+    <%= form.label :patient_id %>
+    <%= form.collection_select(:patient_id, Patient.all, :id, :last_name, {}) %><br/>
+  </div>
+
+  <div class="field">
+    <%= form.label :doctor_id %>
+    <%= form.collection_select(:doctor_id, Doctor.all, :id, :last_name, {}) %><br/>
+  </div>
+
+  <div class="field">
+    <%= form.label :appt %><br/>
+    <%= form.text_field :appt, {placeholder: 'Select Date', :class => "datepicker"} %>
+    <%= form.text_field :appt, {placeholder: 'Select Time', :class => "timepicker"}%>
+  </div>
+
+  <div class="field">
+    <%= form.label :details %>
+    <span> (ICD-9 Code)</span>
+    <%= form.number_field :details %>
+
+   
+  </div><br/>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div><br/>
+
+     
+
+</div>  
+<% end %>
+
+<button id="symp">Code Look Up</button>
+
+<div id="playground"></div>
+
+<h4>Quick guide to ICD-9 codes</h4>
+<table class="striped">
+<tr><td>001–139</td><td>vinfectious and parasitic diseases</td></tr>
+<tr><td>140–239</td><td>neoplasms</td></tr>
+<tr><td>240–279</td><td>endocrine, nutritional and metabolic diseases, and immunity disorders</td></tr>
+<tr><td>280–289</td><td>diseases of the blood and blood-forming organs</td></tr>
+<tr><td>290–319</td><td>mental disorders</td></tr>
+<tr><td>320–389</td><td>diseases of the nervous system and sense organs</td></tr>
+<tr><td>390–459</td><td>diseases of the circulatory system</td></tr>
+<tr><td>460–519</td><td>diseases of the respiratory system</td></tr>
+<tr><td>520–579</td><td>diseases of the digestive system</td></tr>
+<tr><td>580–629</td><td>diseases of the genitourinary system</td></tr>
+<tr><td>630–679</td><td>complications of pregnancy, childbirth, and the puerperium</td></tr>
+<tr><td>680–709</td><td>diseases of the skin and subcutaneous tissue</td></tr>
+<tr><td>710–739</td><td>diseases of the musculoskeletal system and connective tissue</td></tr>
+<tr><td>740–759</td><td>congenital anomalies</td></tr>
+<tr><td>760–779</td><td>certain conditions originating in the perinatal period</td></tr>
+<tr><td>780–799</td><td>symptoms, signs, and ill-defined conditions</td></tr>
+<tr><td>800–999</td><td>injury and poisoning</td></tr>
+</table>
+
+
+<script>
+
+    document.querySelector('#symp').addEventListener('click', function (e) {
+
+        let searchTerm = document.querySelector("#appointment_details").value;
+        //let searchTerm = "Diabetes%20mellitus%20with%20other%20coma%20type%201%20uncontrolled"
+        let lang = "en";
+        
+        fetch("https://connect.medlineplus.gov/service?mainSearchCriteria.v.c="+searchTerm+"&knowledgeResponseType=application/json&informationRecipient.languageCode.c="+lang)
+        .then( function(response){
+            return response.json();
+        }).then(function(data){
+            
+            let parsedData = JSON.parse(JSON.stringify(data));
+            console.log(parsedData.feed)
+
+            let pg = document.querySelector("#playground");
+
+            pg.innerHTML = "";
+            for(let i = 0; i<parsedData.feed.entry.length;i++){
+              pg.innerHTML += "<div><h3>"+parsedData.feed.entry[i].title._value+"</h3>";
+              pg.innerHTML += parsedData.feed.entry[i].summary._value+"</p>"
+            }
+            pg.innerHTML += "<div>Data source from: <br>";
+            //pg.innerHTML = "<a href='"+parsedData.feed.author.url._value+"'>"
+            pg.innerHTML += parsedData.feed.author.name._value
+            pg.innerHTML += "</div><br><br>";
+
+            }) 
+    })
+
+   
+</script>

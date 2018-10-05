@@ -1,0 +1,99 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+ @import "materialize";
+
+.carousel .carousel-item {
+    height: 830px;
+    width: 1050px;
+    // padding-top: 330px;
+    margin-top: 230px;
+    
+ }
+
+ select {
+     display: block;
+ }
+
+.patients_form select {
+    width: 31%;
+    display: inline-grid;
+}
+
+#appointment_appt {
+    width: 47% !important;
+}
+
+
+.nav-wrapper{
+    margin-left: 20px;
+}
+
+.container a{
+    display: inline-block;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 2px;
+    color: white;
+    background: rgb(50, 189, 199);
+}
+
+.container a:hover{
+    background: #777;
+}
+
+#playground{
+    background: #ddf;
+    padding: 5px;
+
+    a{
+        background: #999;
+    }
+}
+
+#symp{
+    background: pink;
+}
+
+body {
+    // background:linear-gradient(to right, #e4efe9, #f5f7fa);
+    background:linear-gradient(to right, #89f7fe, #f5f7fa , #ff7eb3);
+    //uncomment above for my preferred colors
+}
+
+nav {
+    background:linear-gradient(to right, #eb3349 ,#f45c43);
+
+}
+
+.log-photo{
+    margin: 25px auto;
+    width: 50%;
+    max-width: 500px;
+    img{
+        width: 100%;
+    }
+}
+
+td{
+    padding: 0;
+}
+#terms h2, #terms p, #terms ul{
+    padding: 20px;
+}
+
+.patients_form select {
+    width: 30%;
+}
